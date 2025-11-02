@@ -2,7 +2,7 @@ import { Network, Layers, Sparkles } from "lucide-react"
 
 export function InterlaySection() {
   return (
-    <section className="py-24 md:py-32 border-b border-border bg-muted/20">
+    <section className="py-16 md:py-24 border-b border-border bg-muted/20">
       <div className="container px-4 mx-auto max-w-6xl">
         <div className="grid lg:grid-cols-2 gap-16 items-center">
           <div className="space-y-8">
@@ -10,15 +10,17 @@ export function InterlaySection() {
               <div className="inline-block px-3 py-1 rounded-full bg-primary/10 border border-primary/20 text-sm text-primary mb-4">
                 The Solution
               </div>
-              <h2 className="text-4xl md:text-5xl font-bold mb-6 text-balance">
-                Project Interlay: The Space Between the Apps
-              </h2>
+              <h2 className="text-4xl md:text-5xl font-bold mb-6 text-balance">The Space Between the Apps</h2>
             </div>
 
             <p className="text-xl text-muted-foreground leading-relaxed">
-              Interlay is a research initiative to decompose app silos by creating an
+              A research initiative to decompose app silos by creating an
               <span className="text-foreground font-semibold"> interface integration domain</span>. Not another app—a
-              supra-structure for interoperation.
+              supra-structure for interoperation, built on{" "}
+              <a href="https://folkjs.org" className="text-primary hover:underline">
+                FolkJS
+              </a>{" "}
+              as the computational substrate.
             </p>
 
             <div className="space-y-6">

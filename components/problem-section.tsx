@@ -11,7 +11,7 @@ export function ProblemSection() {
             <p className="text-xl text-muted-foreground leading-relaxed">
               Why do we need 10 different apps to talk to the same friends? App silos create terrible UX, fragmenting
               our digital identities, data, and workflows. But this isn't an accident—it's a feature of{" "}
-              <span className="text-primary font-semibold">appitalism</span>.
+              <span className="text-primary font-semibold">appitalism</span> (and ultimately of capitalism).
             </p>
           </div>
 

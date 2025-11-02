@@ -6,9 +6,9 @@ export function Footer() {
       <div className="container px-4 py-12 mx-auto max-w-6xl">
         <div className="grid md:grid-cols-4 gap-8 mb-8">
           <div className="space-y-4">
-            <h3 className="font-semibold text-lg">Project Interlay</h3>
+            <h3 className="font-semibold text-lg">Post-Appitalism</h3>
             <p className="text-sm text-muted-foreground leading-relaxed">
-              Building the exfrastructure for post-appitalist digital ecosystems.
+              Building the exfrastructure for interconnected digital ecosystems.
             </p>
           </div>
 
@@ -34,21 +34,21 @@ export function Footer() {
           </div>
 
           <div className="space-y-3">
-            <h4 className="font-semibold text-sm">Community</h4>
+            <h4 className="font-semibold text-sm">FolkJS</h4>
             <ul className="space-y-2 text-sm text-muted-foreground">
               <li>
-                <a href="#" className="hover:text-primary transition-colors">
+                <a href="https://folkjs.org" className="hover:text-primary transition-colors">
+                  FolkJS.org
+                </a>
+              </li>
+              <li>
+                <a href="https://folkjs.org/docs" className="hover:text-primary transition-colors">
+                  Documentation
+                </a>
+              </li>
+              <li>
+                <a href="https://github.com/folk-systems" className="hover:text-primary transition-colors">
                   GitHub
-                </a>
-              </li>
-              <li>
-                <a href="#" className="hover:text-primary transition-colors">
-                  Discussions
-                </a>
-              </li>
-              <li>
-                <a href="#" className="hover:text-primary transition-colors">
-                  Contributing
                 </a>
               </li>
             </ul>
@@ -71,7 +71,7 @@ export function Footer() {
         </div>
 
         <div className="pt-8 border-t border-border flex flex-col md:flex-row justify-between items-center gap-4 text-sm text-muted-foreground">
-          <p>© 2025 Project Interlay. Open source and commons-aligned.</p>
+          <p>© 2025 Post-Appitalism Research. Open source and commons-aligned.</p>
           <p className="text-xs">No venture capital was harmed in the making of this website.</p>
         </div>
       </div>

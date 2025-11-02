@@ -42,6 +42,32 @@ export function TechnicalSection() {
             </Card>
           </div>
 
+          <div className="bg-primary/5 border border-primary/20 rounded-xl p-8 md:p-12">
+            <div className="max-w-3xl mx-auto space-y-6">
+              <h3 className="text-3xl font-bold text-balance">FolkJS: The Computational Substrate</h3>
+              <p className="text-lg text-muted-foreground leading-relaxed">
+                <a href="https://folkjs.org" className="text-primary hover:underline font-semibold">
+                  FolkJS
+                </a>{" "}
+                provides the necessary computational foundation for post-appitalism. It's a malleable, user-programmable
+                substrate that enables the kind of fluid, interconnected digital ecosystems we envision.
+              </p>
+              <p className="text-muted-foreground leading-relaxed">
+                Without substrates like FolkJS, we remain trapped in vendor-controlled silos. FolkJS gives users the
+                power to compose, extend, and interconnect their tools—making post-appitalist futures technically
+                feasible.
+              </p>
+              <div className="pt-4">
+                <a
+                  href="https://folkjs.org"
+                  className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-primary/10 border border-primary/30 text-primary hover:bg-primary/20 transition-colors"
+                >
+                  Explore FolkJS →
+                </a>
+              </div>
+            </div>
+          </div>
+
           <div className="bg-card border border-border rounded-xl p-8 md:p-12">
             <h3 className="text-2xl font-semibold mb-6">Key Concepts</h3>
             <div className="grid md:grid-cols-2 gap-6">

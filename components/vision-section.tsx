@@ -49,10 +49,14 @@ export function VisionSection() {
 
           <div className="bg-gradient-to-br from-primary/10 via-primary/5 to-transparent border border-primary/20 rounded-2xl p-8 md:p-12">
             <div className="max-w-3xl mx-auto space-y-6">
-              <h3 className="text-3xl font-bold text-balance">Interlay isn't an app—it's a supra-structure</h3>
+              <h3 className="text-3xl font-bold text-balance">Beyond Apps: A Supra-Structure</h3>
               <p className="text-lg text-muted-foreground leading-relaxed">
-                The structure that infrastructure is part of. An exfrastructure enabling ecosystems of tools to
-                self-organize and flow freely. Where information moves as freely as ideas should.
+                This isn't about building another app—it's about creating the supra-structure that enables ecosystems of
+                tools to self-organize and flow freely. Built on substrates like{" "}
+                <a href="https://folkjs.org" className="text-primary hover:underline">
+                  FolkJS
+                </a>
+                , where information moves as freely as ideas should.
               </p>
               <div className="pt-4">
                 <div className="inline-block px-4 py-2 rounded-lg bg-background/50 border border-border text-sm font-mono">
