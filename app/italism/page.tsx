@@ -163,6 +163,112 @@ export default function ItalismPage() {
   const [editingArrow, setEditingArrow] = useState<string | null>(null)
   const [eventTargets, setEventTargets] = useState<Map<string, { source: EventTarget; target: EventTarget }>>(new Map())
 
+  // Undo/Redo state - using useRef to avoid stale closure issues
+  const historyRef = useRef<Shape[][]>([])
+  const historyIndexRef = useRef(-1)
+  const [, forceUpdate] = useState({})
+  const isInitialized = useRef(false)
+
+  // Initialize history with current shapes on mount
+  useEffect(() => {
+    if (!isInitialized.current) {
+      historyRef.current = [JSON.parse(JSON.stringify(shapes))]
+      historyIndexRef.current = 0
+      isInitialized.current = true
+    }
+  }, [])
+
+  // Save state to history (called after any shape modification)
+  const saveToHistory = (newShapes: Shape[]) => {
+    if (!isInitialized.current) return
+
+    // Truncate history after current index (discard redo states)
+    historyRef.current = historyRef.current.slice(0, historyIndexRef.current + 1)
+
+    // Add new state (deep clone to prevent reference issues)
+    historyRef.current.push(JSON.parse(JSON.stringify(newShapes)))
+
+    // Limit to 50 states to prevent memory issues
+    if (historyRef.current.length > 50) {
+      historyRef.current.shift()
+    } else {
+      historyIndexRef.current++
+    }
+
+    setShapes(newShapes)
+  }
+
+  // Undo function - go back one state
+  const undo = () => {
+    if (historyIndexRef.current > 0) {
+      historyIndexRef.current--
+      const previousState = historyRef.current[historyIndexRef.current]
+      setShapes(previousState)
+      forceUpdate({}) // Force re-render to update button states
+    }
+  }
+
+  // Redo function - go forward one state
+  const redo = () => {
+    if (historyIndexRef.current < historyRef.current.length - 1) {
+      historyIndexRef.current++
+      const nextState = historyRef.current[historyIndexRef.current]
+      setShapes(nextState)
+      forceUpdate({}) // Force re-render to update button states
+    }
+  }
+
+  // Keyboard shortcuts
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      // Ctrl+Z or Cmd+Z for undo
+      if ((e.ctrlKey || e.metaKey) && e.code === 'KeyZ' && !e.shiftKey) {
+        e.preventDefault()
+        undo()
+      }
+      // Ctrl+Shift+Z or Cmd+Shift+Z for redo
+      else if ((e.ctrlKey || e.metaKey) && e.code === 'KeyZ' && e.shiftKey) {
+        e.preventDefault()
+        redo()
+      }
+      // Delete key to delete selected shape
+      else if (e.key === 'Delete' && selectedShape) {
+        e.preventDefault()
+        const clicked = shapes.find(s => s.id === selectedShape)
+        if (clicked) {
+          // Cleanup propagator if deleting an arrow
+          if (clicked.type === "arrow") {
+            const propagator = propagators.get(clicked.id)
+            if (propagator) {
+              propagator.dispose()
+              setPropagators((prev) => {
+                const next = new Map(prev)
+                next.delete(clicked.id)
+                return next
+              })
+            }
+            setEventTargets((prev) => {
+              const next = new Map(prev)
+              next.delete(clicked.id)
+              return next
+            })
+          }
+          const newShapes = shapes.filter((shape) => shape.id !== clicked.id)
+          saveToHistory(newShapes)
+          setSelectedShape(null)
+        }
+      }
+      // Escape to deselect
+      else if (e.key === 'Escape') {
+        e.preventDefault()
+        setSelectedShape(null)
+      }
+    }
+
+    window.addEventListener('keydown', handleKeyDown)
+    return () => window.removeEventListener('keydown', handleKeyDown)
+  }, [selectedShape, shapes, propagators])
+
   // Helper function to get the center of a shape
   const getShapeCenter = (shape: Shape): { x: number; y: number } => {
     if (shape.width && shape.height) {
@@ -448,7 +554,8 @@ export default function ItalismPage() {
             return next
           })
         }
-        setShapes(shapes.filter((shape) => shape.id !== clicked.id))
+        const newShapes = shapes.filter((shape) => shape.id !== clicked.id)
+        saveToHistory(newShapes)
         setSelectedShape(null)
       }
     } else if (tool === "text") {
@@ -463,7 +570,7 @@ export default function ItalismPage() {
           text,
           color: "#6366f1",
         }
-        setShapes([...shapes, newShape])
+        saveToHistory([...shapes, newShape])
       }
     } else if (tool === "arrow") {
       // Special handling for arrow tool - snap to shapes
@@ -590,16 +697,20 @@ export default function ItalismPage() {
       }
 
       // If it's an arrow with both source and target, create a propagator
+      const newShapesArray = [...shapes, newShape]
       if (newShape.type === "arrow" && newShape.sourceShapeId && newShape.targetShapeId) {
         newShape.expression = "value: from.value"  // Default expression
-        setShapes([...shapes, newShape])
+        saveToHistory(newShapesArray)
         // Create propagator for this arrow
         setTimeout(() => createPropagatorForArrow(newShape), 0)
       } else {
-        setShapes([...shapes, newShape])
+        saveToHistory(newShapesArray)
       }
 
       setCurrentShape(null)
+    } else if (isDragging) {
+      // Save to history when dragging stops
+      saveToHistory(shapes)
     }
     setIsDrawing(false)
     setIsDragging(false)
@@ -733,6 +844,10 @@ export default function ItalismPage() {
                                 ),
                               )
                             }}
+                            onBlur={() => {
+                              // Save to history when user finishes editing
+                              saveToHistory(shapes)
+                            }}
                             className="w-full px-2 py-1 bg-slate-800 text-white rounded text-xs"
                             placeholder="value: from.value * 2"
                           />
@@ -792,6 +907,10 @@ export default function ItalismPage() {
                             ),
                           )
                         }}
+                        onBlur={() => {
+                          // Save to history when user finishes editing
+                          saveToHistory(shapes)
+                        }}
                         className="w-full px-2 py-1 bg-slate-800 text-white rounded text-xs"
                       />
                     </div>
@@ -806,6 +925,24 @@ export default function ItalismPage() {
 
           {/* Actions */}
           <div className="space-y-2">
+            <div className="flex gap-2">
+              <button
+                onClick={undo}
+                disabled={historyIndexRef.current <= 0}
+                className="flex-1 px-4 py-2 bg-slate-700 hover:bg-slate-600 disabled:bg-slate-800 disabled:text-slate-600 disabled:cursor-not-allowed rounded text-sm transition-colors"
+                title="Undo (Ctrl+Z)"
+              >
+                ↶ Undo
+              </button>
+              <button
+                onClick={redo}
+                disabled={historyIndexRef.current >= historyRef.current.length - 1}
+                className="flex-1 px-4 py-2 bg-slate-700 hover:bg-slate-600 disabled:bg-slate-800 disabled:text-slate-600 disabled:cursor-not-allowed rounded text-sm transition-colors"
+                title="Redo (Ctrl+Shift+Z)"
+              >
+                ↷ Redo
+              </button>
+            </div>
             <button
               onClick={toggleFullscreen}
               className="w-full px-4 py-2 bg-slate-700 hover:bg-slate-600 rounded text-sm transition-colors"
@@ -813,7 +950,7 @@ export default function ItalismPage() {
               {isFullscreen ? "Exit Fullscreen" : "Enter Fullscreen"}
             </button>
             <button
-              onClick={() => setShapes([])}
+              onClick={() => saveToHistory([])}
               className="w-full px-4 py-2 bg-red-600 hover:bg-red-700 rounded text-sm transition-colors"
             >
               Clear Canvas
