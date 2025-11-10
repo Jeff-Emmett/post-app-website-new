@@ -50,13 +50,16 @@ export function perSecondToPerMonth(amountPerSecond: number): number {
 
 /**
  * Determine which zone a node is in based on total inflow
+ *
+ * Capacity threshold is 1.5x the max threshold
  */
 export function getFlowZone(node: FlowNode): FlowZone {
   const totalInflow = node.totalInflow || 0
+  const capacityThreshold = 1.5 * node.maxThreshold
 
   if (totalInflow < node.minThreshold) {
     return 'deficit'
-  } else if (totalInflow <= node.maxThreshold) {
+  } else if (totalInflow < capacityThreshold) {
     return 'building'
   } else {
     return 'capacity'
@@ -66,33 +69,47 @@ export function getFlowZone(node: FlowNode): FlowZone {
 /**
  * Calculate progressive outflow based on zone
  *
- * Deficit Zone (f < min): outflow = 0 (keep everything)
- * Building Zone (min ≤ f ≤ max): outflow = f × ((f - min) / (max - min))
- * Capacity Zone (f > max): outflow = f - max (redirect excess)
+ * Deficit Zone (inflow < min):
+ *   outflow = 0 (keep everything)
+ *
+ * Building Zone (min ≤ inflow < 1.5 * max):
+ *   outflow = (inflow - min) × (0.5 × max) / (1.5 × max - min)
+ *   Progressive sharing that smoothly increases
+ *
+ * Capacity Zone (inflow ≥ 1.5 * max):
+ *   outflow = inflow - max
+ *   Retain max, share all excess
+ *
+ * This ensures monotonically increasing outflow and smooth transitions.
  */
 export function calculateOutflow(node: FlowNode): number {
   const totalInflow = node.totalInflow || 0
   const { minThreshold, maxThreshold } = node
+
+  // Capacity threshold: when you start sharing all excess above max
+  const capacityThreshold = 1.5 * maxThreshold
 
   // Deficit zone: keep everything
   if (totalInflow < minThreshold) {
     return 0
   }
 
-  // Capacity zone: redirect excess
-  if (totalInflow > maxThreshold) {
+  // Capacity zone: retain max, share all excess
+  if (totalInflow >= capacityThreshold) {
     return totalInflow - maxThreshold
   }
 
   // Building zone: progressive sharing
-  const range = maxThreshold - minThreshold
-  if (range === 0) {
-    // Edge case: min === max
-    return totalInflow > maxThreshold ? totalInflow - maxThreshold : 0
+  const buildingRange = capacityThreshold - minThreshold
+  if (buildingRange === 0) {
+    // Edge case: min === 1.5 * max (shouldn't happen in practice)
+    return totalInflow - maxThreshold
   }
 
-  const ratio = (totalInflow - minThreshold) / range
-  return totalInflow * ratio
+  const excess = totalInflow - minThreshold
+  const targetOutflow = 0.5 * maxThreshold // What we'll share at capacity threshold
+
+  return (excess / buildingRange) * targetOutflow
 }
 
 /**
