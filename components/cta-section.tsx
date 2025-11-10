@@ -11,7 +11,7 @@ export function CTASection() {
             <h2 className="text-4xl md:text-5xl font-bold text-balance">Building Necessary Infrastructure</h2>
             <p className="text-xl text-muted-foreground leading-relaxed">
               If we want to build a more open, equitable, and adaptable digital future, we need open source
-              supra-structure and substrates like{" "}
+              exfrastructure and substrates like{" "}
               <a href="https://folkjs.org" className="text-primary hover:underline">
                 FolkJS
               </a>{" "}

@@ -24,8 +24,6 @@ export function HeroSection() {
 
       <div className="container relative z-10 px-4 py-20 mx-auto max-w-6xl">
         <div className="text-center space-y-8">
-          
-
           <h1 className="text-5xl md:text-7xl lg:text-8xl font-bold tracking-tight text-balance">
             Weaving a <span className="text-primary">Post-Appitalist</span> Future
           </h1>

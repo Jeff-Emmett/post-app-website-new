@@ -69,11 +69,6 @@ export function Footer() {
             </div>
           </div>
         </div>
-
-        <div className="pt-8 border-t border-border flex flex-col md:flex-row justify-between items-center gap-4 text-sm text-muted-foreground">
-          <p>© 2025 Post-Appitalism Research. Open source and commons-aligned.</p>
-          <p className="text-xs">No venture capital was harmed in the making of this website.</p>
-        </div>
       </div>
     </footer>
   )
