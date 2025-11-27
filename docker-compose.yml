@@ -1,0 +1,20 @@
+services:
+  post-app-prod:
+    build: .
+    restart: unless-stopped
+    labels:
+      - "traefik.enable=true"
+      # Main domain
+      - "traefik.http.routers.post-app.rule=Host(`post-appitalism.app`) || Host(`www.post-appitalism.app`)"
+      - "traefik.http.routers.post-app.entrypoints=web"
+      - "traefik.http.services.post-app.loadbalancer.server.port=80"
+      # Redirect www to non-www
+      - "traefik.http.middlewares.post-app-redirect.redirectregex.regex=^https?://www\\.post-appitalism\\.app/(.*)"
+      - "traefik.http.middlewares.post-app-redirect.redirectregex.replacement=https://post-appitalism.app/$${1}"
+      - "traefik.http.middlewares.post-app-redirect.redirectregex.permanent=true"
+    networks:
+      - traefik-public
+
+networks:
+  traefik-public:
+    external: true
