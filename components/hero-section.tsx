@@ -34,12 +34,16 @@ export function HeroSection() {
           </p>
 
           <div className="flex flex-col sm:flex-row gap-4 justify-center items-center pt-8">
-            <Button size="lg" className="text-lg px-8 group">
-              Explore the Vision
-              <ArrowRight className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform" />
+            <Button size="lg" className="text-lg px-8 group" asChild>
+              <a href="/demos">
+                View Interactive Demos
+                <ArrowRight className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform" />
+              </a>
             </Button>
-            <Button size="lg" variant="outline" className="text-lg px-8 bg-transparent">
-              Read the Research
+            <Button size="lg" variant="outline" className="text-lg px-8 bg-transparent" asChild>
+              <a href="#vision">
+                Explore the Vision
+              </a>
             </Button>
           </div>
         </div>
