@@ -8,6 +8,7 @@ const _geist = Geist({ subsets: ["latin"] })
 const _geistMono = Geist_Mono({ subsets: ["latin"] })
 
 export const metadata: Metadata = {
+  metadataBase: new URL("https://post-app.net"),
   title: "Project Interlay | Post-Appitalism",
   description: "Weaving a post-appitalist future. Decomposing the data silos of capitalist business models.",
   generator: "v0.app",
@@ -18,6 +19,28 @@ export const metadata: Metadata = {
         type: "image/svg+xml",
       },
     ],
+  },
+  openGraph: {
+    type: "website",
+    locale: "en_US",
+    url: "https://post-app.net",
+    title: "Project Interlay | Post-Appitalism",
+    description: "Weaving a post-appitalist future. Decomposing the data silos of capitalist business models.",
+    siteName: "Project Interlay",
+    images: [
+      {
+        url: "/og-image.jpg",
+        width: 1200,
+        height: 630,
+        alt: "Project Interlay - Weaving a post-appitalist future",
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Project Interlay | Post-Appitalism",
+    description: "Weaving a post-appitalist future. Decomposing the data silos of capitalist business models.",
+    images: ["/og-image.jpg"],
   },
 }
 
