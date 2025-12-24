@@ -5,6 +5,7 @@ import { TechnicalSection } from "@/components/technical-section"
 import { VisionSection } from "@/components/vision-section"
 import { WhyNowSection } from "@/components/why-now-section"
 import { CTASection } from "@/components/cta-section"
+import { NewsletterSignup } from "@/components/newsletter-signup"
 import { Footer } from "@/components/footer"
 
 export default function HomePage() {
@@ -17,6 +18,7 @@ export default function HomePage() {
       <VisionSection />
       <WhyNowSection />
       <CTASection />
+      <NewsletterSignup />
       <Footer />
     </main>
   )
