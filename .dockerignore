@@ -1,0 +1,27 @@
+# Git
+.git
+.gitignore
+
+# Development
+node_modules
+.next
+.cache
+
+# Documentation
+README.md
+CLAUDE.md
+*.md
+
+# IDE
+.idea
+.vscode
+*.swp
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Environment (keep .env.example)
+.env
+.env.local
+.env*.local
