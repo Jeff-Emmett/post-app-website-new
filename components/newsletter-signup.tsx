@@ -19,7 +19,7 @@ export function NewsletterSignup() {
     setStatus("loading")
 
     try {
-      const response = await fetch(`NEWSLETTER_API`, {
+      const response = await fetch(NEWSLETTER_API, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
