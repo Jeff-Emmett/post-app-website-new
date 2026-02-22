@@ -12,6 +12,12 @@ services:
       - "traefik.http.middlewares.post-app-redirect.redirectregex.regex=^https?://www\\.post-appitalism\\.app/(.*)"
       - "traefik.http.middlewares.post-app-redirect.redirectregex.replacement=https://post-appitalism.app/$${1}"
       - "traefik.http.middlewares.post-app-redirect.redirectregex.permanent=true"
+    healthcheck:
+      test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://127.0.0.1:80/"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 15s
     networks:
       - traefik-public
 
