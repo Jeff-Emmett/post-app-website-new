@@ -9,8 +9,8 @@ on:
     branches: [main]
 
 env:
-  REGISTRY: gitea.jeffemmett.com
-  IMAGE: gitea.jeffemmett.com/jeffemmett/post-app-website-new
+  REGISTRY: localhost:3000
+  IMAGE: localhost:3000/jeffemmett/post-app-website-new
 
 jobs:
   deploy:
