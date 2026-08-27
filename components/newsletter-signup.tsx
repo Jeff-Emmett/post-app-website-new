@@ -3,7 +3,7 @@
 import { useState } from "react"
 import { Button } from "@/components/ui/button"
 
-const NEWSLETTER_API = "https://newsletter.jeffemmett.com/subscribe"
+const NEWSLETTER_API = "https://newsletter.rspace.online/subscribe"
 const LIST_UUID = "0a4810a2-13c7-4ba9-a65b-bc2251283298" // Post-Appitalism list
 
 export function NewsletterSignup() {
