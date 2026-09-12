@@ -1,26 +1,38 @@
 services:
   post-app-prod:
-    build: .
     restart: unless-stopped
+    read_only: true
+    tmpfs:
+    - /tmp
+    - /var/cache/nginx
+    - /var/run
+    cap_drop:
+    - ALL
+    cap_add:
+    - NET_BIND_SERVICE
+    - CHOWN
+    - SETGID
+    - SETUID
+    - DAC_OVERRIDE
+    security_opt:
+    - no-new-privileges:true
     labels:
-      - "traefik.enable=true"
-      # Main domain
-      - "traefik.http.routers.post-app.rule=Host(`post-appitalism.app`) || Host(`www.post-appitalism.app`)"
-      - "traefik.http.routers.post-app.entrypoints=web"
-      - "traefik.http.services.post-app.loadbalancer.server.port=80"
-      # Redirect www to non-www
-      - "traefik.http.middlewares.post-app-redirect.redirectregex.regex=^https?://www\\.post-appitalism\\.app/(.*)"
-      - "traefik.http.middlewares.post-app-redirect.redirectregex.replacement=https://post-appitalism.app/$${1}"
-      - "traefik.http.middlewares.post-app-redirect.redirectregex.permanent=true"
+    - traefik.enable=true
+    - traefik.http.routers.post-app.rule=Host(`post-appitalism.app`) || Host(`www.post-appitalism.app`)
+    - traefik.http.routers.post-app.entrypoints=web
+    - traefik.http.services.post-app.loadbalancer.server.port=80
+    - traefik.http.middlewares.post-app-redirect.redirectregex.regex=^https?://www\.post-appitalism\.app/(.*)
+    - traefik.http.middlewares.post-app-redirect.redirectregex.replacement=https://post-appitalism.app/$${1}
+    - traefik.http.middlewares.post-app-redirect.redirectregex.permanent=true
+    networks:
+    - traefik-public
+    image: localhost:3000/jeffemmett/post-app-website-new:${IMAGE_TAG:-latest}
     healthcheck:
       test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://127.0.0.1:80/"]
       interval: 30s
       timeout: 10s
       retries: 3
       start_period: 15s
-    networks:
-      - traefik-public
-
 networks:
   traefik-public:
     external: true
