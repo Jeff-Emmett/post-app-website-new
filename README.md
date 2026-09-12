@@ -2,9 +2,6 @@
 
 Interactive website and canvas demo for **Threshold-Based Flow Funding** - a novel resource allocation mechanism for decentralized networks.
 
-[![Built with v0](https://img.shields.io/badge/Built%20with-v0.app-black?style=for-the-badge)](https://v0.app/chat/s5q7XzkHh6S)
-[![Deployed on Vercel](https://img.shields.io/badge/Deployed%20on-Vercel-black?style=for-the-badge&logo=vercel)](https://vercel.com/jeff-emmetts-projects/v0-post-appitalism-website)
-
 ---
 
 ## Quick Start
@@ -206,14 +203,6 @@ See `../../../CLAUDE.md` for complete development philosophy.
 - **Scoped Propagators Article**: https://www.orionreed.com/posts/scoped-propagators
 
 ---
-
-## Deployment
-
-**Live Site**: https://vercel.com/jeff-emmetts-projects/v0-post-appitalism-website
-
-**v0 Chat**: https://v0.app/chat/s5q7XzkHh6S
-
-Changes deployed via v0.app are automatically synced to this repository and deployed via Vercel.
 
 ---
 
